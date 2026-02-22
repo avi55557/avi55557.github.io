@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,55 +9,88 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #141e30, #243b55);
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     color: white;
-    text-align: center;
-    padding: 20px;
 }
 
 .container {
+    width: 95%;
     max-width: 500px;
-    margin: auto;
+    backdrop-filter: blur(15px);
     background: rgba(255,255,255,0.08);
-    padding: 25px;
-    border-radius: 15px;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    animation: fadeIn 1.2s ease-in-out;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+p {
+    opacity: 0.8;
 }
 
 .star {
     font-size: 45px;
     cursor: pointer;
-    margin: 8px;
-    transition: 0.3s;
+    margin: 6px;
+    transition: 0.3s ease;
 }
 
 .star:hover {
-    transform: scale(1.2);
+    transform: scale(1.3);
 }
 
 .selected {
     color: gold;
+    animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+    0% { transform: scale(0.5); }
+    100% { transform: scale(1.2); }
+}
+
+.review-box {
+    background: rgba(255,255,255,0.9);
+    color: black;
+    padding: 15px;
+    border-radius: 12px;
+    margin-top: 20px;
+    min-height: 70px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.6s ease;
+}
+
+.review-box.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 button {
     margin-top: 15px;
     padding: 12px 25px;
     border: none;
-    border-radius: 8px;
-    background: #00e676;
+    border-radius: 30px;
+    background: linear-gradient(45deg,#00ff88,#00c853);
     color: black;
     font-weight: bold;
     cursor: pointer;
-    font-size: 15px;
+    transition: 0.3s;
 }
 
-.suggest-box {
-    background: white;
-    color: black;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    font-size: 14px;
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #00ff88;
 }
 
 .hidden {
@@ -64,8 +98,14 @@ button {
 }
 
 .warning {
-    color: #ff4d4d;
+    color: #ff5252;
     margin-top: 10px;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
 }
 </style>
 </head>
@@ -77,7 +117,7 @@ button {
 <h1>Aavizon Digital Marketing Agency</h1>
 <p>आपला अनुभव कसा होता?</p>
 
-<div id="stars">
+<div>
 <span class="star" onclick="rate(1)">⭐</span>
 <span class="star" onclick="rate(2)">⭐</span>
 <span class="star" onclick="rate(3)">⭐</span>
@@ -86,19 +126,19 @@ button {
 </div>
 
 <p id="warningMsg" class="warning hidden">
-कृपया किमान 3 Star निवडा पुढे जाण्यासाठी.
+किमान 3 Star निवडा पुढे जाण्यासाठी.
 </p>
 
 <div id="positiveSection" class="hidden">
-    <h3>धन्यवाद 🙏 कृपया Google वर Review द्या</h3>
 
-    <div class="suggest-box" id="reviewText">
-        Aavizon Digital Marketing Agency ची सेवा उत्कृष्ट आहे.
-    </div>
+<div id="reviewText" class="review-box">
+Loading review...
+</div>
 
-    <button onclick="copyReview()">Copy Review</button>
-    <br>
-    <button onclick="goToGoogle()">Google Review Page</button>
+<button onclick="copyReview()">Copy Review</button>
+<br>
+<button onclick="goToGoogle()">Go To Google Review</button>
+
 </div>
 
 </div>
@@ -107,22 +147,47 @@ button {
 
 let selectedRating = 0;
 
+const reviews = [
+"Highly professional and result-driven agency.",
+"SEO आणि Google Ads साठी best choice.",
+"Lead generation मध्ये powerful results मिळाले.",
+"Affordable pricing आणि excellent service.",
+"Business growth साठी trusted partner.",
+"Modern website design आणि branding strategy.",
+"Full satisfaction आणि strong support team.",
+"Highly recommended for all business types.",
+"Excellent communication आणि quick response.",
+"Top quality digital marketing solutions."
+];
+
+let index = 0;
+
+function rotateReviews() {
+    const box = document.getElementById("reviewText");
+    box.classList.remove("show");
+
+    setTimeout(() => {
+        box.innerText = reviews[index];
+        box.classList.add("show");
+        index = (index + 1) % reviews.length;
+    }, 500);
+}
+
+setInterval(rotateReviews, 2000);
+
 const stars = document.querySelectorAll(".star");
 
-function rate(starsCount) {
-    selectedRating = starsCount;
+function rate(starCount) {
+    selectedRating = starCount;
 
-    stars.forEach((star, index) => {
-        if (index < starsCount) {
-            star.classList.add("selected");
-        } else {
-            star.classList.remove("selected");
-        }
+    stars.forEach((star, i) => {
+        star.classList.toggle("selected", i < starCount);
     });
 
     if (selectedRating >= 3) {
         document.getElementById("positiveSection").classList.remove("hidden");
         document.getElementById("warningMsg").classList.add("hidden");
+        rotateReviews();
     } else {
         document.getElementById("positiveSection").classList.add("hidden");
         document.getElementById("warningMsg").classList.remove("hidden");
@@ -132,7 +197,7 @@ function rate(starsCount) {
 function copyReview() {
     const text = document.getElementById("reviewText").innerText;
     navigator.clipboard.writeText(text);
-    alert("Review Copied! आता Google मध्ये paste करा.");
+    alert("Review Copied! Paste in Google.");
 }
 
 function goToGoogle() {
@@ -147,4 +212,3 @@ function goToGoogle() {
 
 </body>
 </html>
-
