@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,111 +5,126 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aavizon Digital Marketing Agency - Review</title>
 
+<!-- Particles + Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
 <style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    color: white;
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#0f2027;
+overflow:hidden;
+color:white;
 }
 
-.container {
-    width: 95%;
-    max-width: 500px;
-    backdrop-filter: blur(15px);
-    background: rgba(255,255,255,0.08);
-    padding: 30px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
-    animation: fadeIn 1.2s ease-in-out;
+#tsparticles{
+position:absolute;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
-h1 {
-    margin-bottom: 5px;
+.container{
+width:95%;
+max-width:450px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(20px);
+padding:30px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 0 40px rgba(0,0,0,0.6);
+animation:fadeIn 1s ease;
+transition:0.3s;
 }
 
-p {
-    opacity: 0.8;
+.container:hover{
+transform:rotateY(5deg) rotateX(5deg);
 }
 
-.star {
-    font-size: 45px;
-    cursor: pointer;
-    margin: 6px;
-    transition: 0.3s ease;
+h1{
+margin-bottom:5px;
 }
 
-.star:hover {
-    transform: scale(1.3);
+.star{
+font-size:42px;
+cursor:pointer;
+margin:6px;
+transition:0.3s;
 }
 
-.selected {
-    color: gold;
-    animation: pop 0.3s ease;
+.star:hover{
+transform:scale(1.3);
 }
 
-@keyframes pop {
-    0% { transform: scale(0.5); }
-    100% { transform: scale(1.2); }
+.selected{
+color:gold;
+animation:pop 0.3s ease;
 }
 
-.review-box {
-    background: rgba(255,255,255,0.9);
-    color: black;
-    padding: 15px;
-    border-radius: 12px;
-    margin-top: 20px;
-    min-height: 70px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.6s ease;
+@keyframes pop{
+0%{transform:scale(0.5);}
+100%{transform:scale(1.2);}
 }
 
-.review-box.show {
-    opacity: 1;
-    transform: translateY(0);
+.review-box{
+background:white;
+color:black;
+padding:15px;
+border-radius:12px;
+margin-top:20px;
+min-height:70px;
+opacity:0;
+transform:translateY(20px);
+transition:0.5s;
 }
 
-button {
-    margin-top: 15px;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    background: linear-gradient(45deg,#00ff88,#00c853);
-    color: black;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+.review-box.show{
+opacity:1;
+transform:translateY(0);
 }
 
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px #00ff88;
+button{
+margin-top:15px;
+padding:12px 25px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#00ff88,#00c853);
+color:black;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+width:100%;
 }
 
-.hidden {
-    display: none;
+button:hover{
+transform:scale(1.05);
+box-shadow:0 0 15px #00ff88;
 }
 
-.warning {
-    color: #ff5252;
-    margin-top: 10px;
-    animation: fadeIn 0.5s;
+.hidden{
+display:none;
 }
 
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+.warning{
+color:#ff5252;
+margin-top:10px;
+}
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
 }
 </style>
 </head>
 
 <body>
+
+<div id="tsparticles"></div>
 
 <div class="container">
 
@@ -135,15 +149,25 @@ button:hover {
 Loading review...
 </div>
 
-<button onclick="copyReview()">Copy Review</button>
-<br>
-<button onclick="goToGoogle()">Go To Google Review</button>
+<button onclick="copyAndRedirect()">Copy Review & Go To Google</button>
 
 </div>
 
 </div>
 
 <script>
+
+/* PARTICLES BACKGROUND */
+tsParticles.load("tsparticles",{
+particles:{
+number:{value:70},
+color:{value:"#00ff88"},
+shape:{type:"circle"},
+opacity:{value:0.5},
+size:{value:3},
+move:{enable:true,speed:2}
+}
+});
 
 let selectedRating = 0;
 
@@ -161,51 +185,57 @@ const reviews = [
 ];
 
 let index = 0;
+const box = document.getElementById("reviewText");
 
-function rotateReviews() {
-    const box = document.getElementById("reviewText");
-    box.classList.remove("show");
-
-    setTimeout(() => {
-        box.innerText = reviews[index];
-        box.classList.add("show");
-        index = (index + 1) % reviews.length;
-    }, 500);
+function rotateReviews(){
+box.classList.remove("show");
+setTimeout(()=>{
+box.innerText = reviews[index];
+box.classList.add("show");
+index = (index + 1) % reviews.length;
+},400);
 }
 
-setInterval(rotateReviews, 2000);
+setInterval(rotateReviews,2000);
 
 const stars = document.querySelectorAll(".star");
 
-function rate(starCount) {
-    selectedRating = starCount;
+function rate(starCount){
+selectedRating = starCount;
 
-    stars.forEach((star, i) => {
-        star.classList.toggle("selected", i < starCount);
-    });
+stars.forEach((star,i)=>{
+star.classList.toggle("selected", i < starCount);
+});
 
-    if (selectedRating >= 3) {
-        document.getElementById("positiveSection").classList.remove("hidden");
-        document.getElementById("warningMsg").classList.add("hidden");
-        rotateReviews();
-    } else {
-        document.getElementById("positiveSection").classList.add("hidden");
-        document.getElementById("warningMsg").classList.remove("hidden");
-    }
+if(selectedRating >= 3){
+document.getElementById("positiveSection").classList.remove("hidden");
+document.getElementById("warningMsg").classList.add("hidden");
+rotateReviews();
+}else{
+document.getElementById("positiveSection").classList.add("hidden");
+document.getElementById("warningMsg").classList.remove("hidden");
+}
 }
 
-function copyReview() {
-    const text = document.getElementById("reviewText").innerText;
-    navigator.clipboard.writeText(text);
-    alert("Review Copied! Paste in Google.");
+function copyAndRedirect(){
+
+if(selectedRating < 3){
+alert("किमान 3 Star निवडा.");
+return;
 }
 
-function goToGoogle() {
-    if (selectedRating >= 3) {
-        window.location.href = "https://g.page/r/CaZGgDHF53zyEBM/review";
-    } else {
-        alert("किमान 3 Star निवडा.");
-    }
+navigator.clipboard.writeText(box.innerText);
+
+/* Confetti Blast */
+confetti({
+particleCount:150,
+spread:90,
+origin:{y:0.6}
+});
+
+setTimeout(()=>{
+window.location.href="https://g.page/r/CaZGgDHF53zyEBM/review";
+},1500);
 }
 
 </script>
