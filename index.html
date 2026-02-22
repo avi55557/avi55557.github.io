@@ -23,10 +23,6 @@ body {
     border-radius: 15px;
 }
 
-h1 {
-    margin-bottom: 5px;
-}
-
 .star {
     font-size: 45px;
     cursor: pointer;
@@ -36,6 +32,10 @@ h1 {
 
 .star:hover {
     transform: scale(1.2);
+}
+
+.selected {
+    color: gold;
 }
 
 button {
@@ -50,10 +50,6 @@ button {
     font-size: 15px;
 }
 
-button:hover {
-    opacity: 0.9;
-}
-
 .suggest-box {
     background: white;
     color: black;
@@ -63,15 +59,13 @@ button:hover {
     font-size: 14px;
 }
 
-textarea {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
 .hidden {
     display: none;
+}
+
+.warning {
+    color: #ff4d4d;
+    margin-top: 10px;
 }
 </style>
 </head>
@@ -83,7 +77,7 @@ textarea {
 <h1>Aavizon Digital Marketing Agency</h1>
 <p>आपला अनुभव कसा होता?</p>
 
-<div>
+<div id="stars">
 <span class="star" onclick="rate(1)">⭐</span>
 <span class="star" onclick="rate(2)">⭐</span>
 <span class="star" onclick="rate(3)">⭐</span>
@@ -91,9 +85,12 @@ textarea {
 <span class="star" onclick="rate(5)">⭐</span>
 </div>
 
-<!-- Positive Section -->
+<p id="warningMsg" class="warning hidden">
+कृपया किमान 3 Star निवडा पुढे जाण्यासाठी.
+</p>
+
 <div id="positiveSection" class="hidden">
-    <h3>धन्यवाद 🙏 कृपया Google वर 5⭐ Review द्या</h3>
+    <h3>धन्यवाद 🙏 कृपया Google वर Review द्या</h3>
 
     <div class="suggest-box" id="reviewText">
         Aavizon Digital Marketing Agency ची सेवा उत्कृष्ट आहे.
@@ -104,40 +101,31 @@ textarea {
     <button onclick="goToGoogle()">Google Review Page</button>
 </div>
 
-<!-- Negative Section -->
-<div id="negativeSection" class="hidden">
-    <h3>कृपया तुमचा feedback खाली लिहा</h3>
-    <textarea rows="4" placeholder="तुमची समस्या येथे लिहा..."></textarea>
-    <br>
-    <button>Submit Feedback</button>
-</div>
-
 </div>
 
 <script>
 
-const reviews = [
-"Aavizon Digital Marketing Agency ची service खूप professional आहे. Full satisfaction मिळाले.",
-"Digital marketing आणि lead generation मध्ये उत्कृष्ट काम. Highly recommended!",
-"SEO आणि Google Ads साठी best agency आहे.",
-"Team खूप supportive आहे आणि result oriented काम करते.",
-"Website design आणि branding service खूपच जबरदस्त आहे."
-];
+let selectedRating = 0;
 
-let index = 0;
+const stars = document.querySelectorAll(".star");
 
-setInterval(() => {
-    index = (index + 1) % reviews.length;
-    document.getElementById("reviewText").innerText = reviews[index];
-}, 3000);
+function rate(starsCount) {
+    selectedRating = starsCount;
 
-function rate(stars) {
-    if (stars >= 4) {
+    stars.forEach((star, index) => {
+        if (index < starsCount) {
+            star.classList.add("selected");
+        } else {
+            star.classList.remove("selected");
+        }
+    });
+
+    if (selectedRating >= 3) {
         document.getElementById("positiveSection").classList.remove("hidden");
-        document.getElementById("negativeSection").classList.add("hidden");
+        document.getElementById("warningMsg").classList.add("hidden");
     } else {
-        document.getElementById("negativeSection").classList.remove("hidden");
         document.getElementById("positiveSection").classList.add("hidden");
+        document.getElementById("warningMsg").classList.remove("hidden");
     }
 }
 
@@ -148,10 +136,15 @@ function copyReview() {
 }
 
 function goToGoogle() {
-    window.location.href = "https://g.page/r/CaZGgDHF53zyEBM/review";
+    if (selectedRating >= 3) {
+        window.location.href = "https://g.page/r/CaZGgDHF53zyEBM/review";
+    } else {
+        alert("किमान 3 Star निवडा.");
+    }
 }
 
 </script>
 
 </body>
 </html>
+
