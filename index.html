@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aavizon Digital Marketing Agency - Review</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 15px;
+}
+
+h1 {
+    margin-bottom: 5px;
+}
+
+.star {
+    font-size: 45px;
+    cursor: pointer;
+    margin: 8px;
+    transition: 0.3s;
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    background: #00e676;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.suggest-box {
+    background: white;
+    color: black;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Aavizon Digital Marketing Agency</h1>
+<p>आपला अनुभव कसा होता?</p>
+
+<div>
+<span class="star" onclick="rate(1)">⭐</span>
+<span class="star" onclick="rate(2)">⭐</span>
+<span class="star" onclick="rate(3)">⭐</span>
+<span class="star" onclick="rate(4)">⭐</span>
+<span class="star" onclick="rate(5)">⭐</span>
+</div>
+
+<!-- Positive Section -->
+<div id="positiveSection" class="hidden">
+    <h3>धन्यवाद 🙏 कृपया Google वर 5⭐ Review द्या</h3>
+
+    <div class="suggest-box" id="reviewText">
+        Aavizon Digital Marketing Agency ची सेवा उत्कृष्ट आहे.
+    </div>
+
+    <button onclick="copyReview()">Copy Review</button>
+    <br>
+    <button onclick="goToGoogle()">Google Review Page</button>
+</div>
+
+<!-- Negative Section -->
+<div id="negativeSection" class="hidden">
+    <h3>कृपया तुमचा feedback खाली लिहा</h3>
+    <textarea rows="4" placeholder="तुमची समस्या येथे लिहा..."></textarea>
+    <br>
+    <button>Submit Feedback</button>
+</div>
+
+</div>
+
+<script>
+
+const reviews = [
+"Aavizon Digital Marketing Agency ची service खूप professional आहे. Full satisfaction मिळाले.",
+"Digital marketing आणि lead generation मध्ये उत्कृष्ट काम. Highly recommended!",
+"SEO आणि Google Ads साठी best agency आहे.",
+"Team खूप supportive आहे आणि result oriented काम करते.",
+"Website design आणि branding service खूपच जबरदस्त आहे."
+];
+
+let index = 0;
+
+setInterval(() => {
+    index = (index + 1) % reviews.length;
+    document.getElementById("reviewText").innerText = reviews[index];
+}, 3000);
+
+function rate(stars) {
+    if (stars >= 4) {
+        document.getElementById("positiveSection").classList.remove("hidden");
+        document.getElementById("negativeSection").classList.add("hidden");
+    } else {
+        document.getElementById("negativeSection").classList.remove("hidden");
+        document.getElementById("positiveSection").classList.add("hidden");
+    }
+}
+
+function copyReview() {
+    const text = document.getElementById("reviewText").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Review Copied! आता Google मध्ये paste करा.");
+}
+
+function goToGoogle() {
+    window.location.href = "https://g.page/r/CaZGgDHF53zyEBM/review";
+}
+
+</script>
+
+</body>
+</html>
